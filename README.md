@@ -14,3 +14,10 @@ GitHub: https://github.com/MirrorNetworking/Mirror
 - ![image](https://user-images.githubusercontent.com/20149493/236564224-0391e99a-c1e9-42a8-b741-1fc12c1460bd.png)
 -https://www.youtube.com/watch?v=eFHDKflitqQ&list=PLkx8oFug638oBYF5EOwsSS-gOVBXj1dkP
 ![image](https://user-images.githubusercontent.com/20149493/236564291-ba0fec41-02d8-41b5-9552-677a97fe86cd.png)
+
+
+------------
+
+
+## Port forwarding
+https://youtu.be/jfSLxs40sIw
