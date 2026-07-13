@@ -1,6 +1,6 @@
 
 Example of script to request ownership:
-```
+```cs
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
