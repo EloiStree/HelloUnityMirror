@@ -1,3 +1,26 @@
+- [00:02](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=2s) - Introduction    
+- [00:32](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=32s) - Les commandes de base    
+- [01:37](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=97s&pp=0gcJCTEAlc8ueATH) - Créer une clé cryptographique publique   
+- [01:53](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=113s) - Ajouter un Network Identity au joueur
+- [02:22](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=142s) - Détecter l'arrivée du joueur avec OnStartClient
+- [03:37](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=217s) - Identifier le joueur local (isClient, isOwned) et le stocker dans un Singleton
+- [03:58](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=238s) - Charger ou générer les clés RSA (Privée & Publique)
+- [04:27](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=267s) - Envoyer un message au serveur avec [Command]
+- [05:55](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=355s) - Répondre à un client spécifique avec [TargetRPC]
+- [07:28](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=448s) - Signer le message avec la clé privée (Cryptographie RSA)
+- [08:43](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=523s) - Le serveur vérifie la signature du client
+- [09:58](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=598s) - Rendre la clé publique publique avec [SyncVar]
+- [10:41](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=641s) - Déclencher un événement avec un Hook de SyncVar
+- [11:21](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=681s) - Résultat dans l'éditeur et ajout au Singleton
+- [11:31](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=691s) - Préparer les champs exposés (Player ID, IsOwned, Clé publique)
+- [12:01](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=721s) - Exemple pratique : Créer un Blocky (visuel de la clé)
+- [14:17](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=857s&pp=0gcJCTEAlc8ueATH) - Astuce : Script utilitaire pour les événements (IfOwnedEvent)
+- [15:40](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=940s) - Envoyer et recevoir du texte/bytes (façon WebSocket)
+- [18:10](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=1090s) - Optimisation : Compresser les données (2 joysticks sur 32 bits)
+- [20:14](https://www.youtube.com/watch?v=oKf_EAU-ct4&t=1214s) - Récapitulatif et liens des sources
+
+-------------
+
 [<img width="1322" height="836" alt="image" src="https://github.com/user-attachments/assets/1d551403-d7ff-4734-9d15-0cd673e44986" />
 ](https://youtu.be/oKf_EAU-ct4?t=2)
 https://youtu.be/oKf_EAU-ct4?t=2
