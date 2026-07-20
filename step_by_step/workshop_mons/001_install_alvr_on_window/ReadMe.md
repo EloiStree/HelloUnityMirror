@@ -46,7 +46,7 @@ ALVR is ready and installed.
 ![alt text](image-11.png)
 
 For the next part:
-- You need to have installed Steam VR and setup it up as Open XR entry.
+- Installed Steam VR and setup it up as Open XR entry as in the last step
 - Create a Wifi Hostspot for your device.
 - Have the Quest on the wifi of your computer
 - Installed ALVR on your Quest3
