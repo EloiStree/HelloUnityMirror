@@ -248,6 +248,50 @@ Be careful to move the object **only if you own it**.
 
 ![alt text](image-22.png)
 
+
+**Code State**
+```cs
+using UnityEngine;
+using Mirror;
+using UnityEngine.Events;
+namespace Eloi.UnicodeWatch
+{
+    [RequireComponent(typeof(NetworkIdentity))]
+    public class UnicodeWatchMirrorMono_BasicPlayer : NetworkBehaviour
+    {
+        public UnityEvent<Color> m_onColorChanged;
+        public float m_randomSpotAtStart = 2f;
+        public bool m_randomColorAtStart = true;
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            if (!isOwned)
+                return;
+            transform.position = new Vector3(Random.Range(0f, m_randomSpotAtStart), Random.Range(0f, m_randomSpotAtStart), Random.Range(0f, m_randomSpotAtStart));
+            if (m_randomColorAtStart)
+                SetNewRandomColor();
+        }
+        [ContextMenu("Set new Random Color")]
+        public void SetNewRandomColor()
+        {
+            Color c = new Color(Random.value, Random.value, Random.value);
+            CmdSetColor(c);
+        }
+        [Command]
+        private void CmdSetColor(Color c)
+        {
+            RpcSetColor(c);
+        }
+        [ClientRpc]
+        private void RpcSetColor(Color c)
+        {
+            m_onColorChanged?.Invoke(c);
+        }
+    }
+}
+```
+
+
 ---
 
 # The Problem with ClientRpc
@@ -259,3 +303,140 @@ They never received the earlier `ClientRpc`, so they don't know what color the e
 This is exactly why **`[SyncVar]`** exists.
 
 A `SyncVar` automatically synchronizes the current value to newly connected clients, ensuring everyone sees the correct state even if they join after the change occurred.
+
+
+
+Let's changed that.
+
+Add a class member as SyncVar
+```cs
+        [SerializeField]
+        [SyncVar]
+        Color m_wantedWatchColor;
+```
+
+![alt text](image-23.png)
+
+
+A `SyncVar` should only be changed on the server to impact all players.  
+And is changeable only if the player has authority to call the server.  
+
+Excepte if you do a [Command] without autorithy
+`[Command(requiresAuthority = false)]`
+Let's try it for the fun.
+
+As we want to do action when color is change we can hook the `SyncVar`
+```cs
+[SerializeField]
+[SyncVar(hook = nameof(HookColorChanged))]
+Color m_wantedWatchColor;
+private void HookColorChanged(Color oldColor, Color newColor)
+{
+    m_onColorChanged?.Invoke(newColor);
+}
+```
+
+
+
+Let' try this full code:
+```cs
+using UnityEngine;
+using Mirror;
+using UnityEngine.Events;
+namespace Eloi.UnicodeWatch
+{
+    [RequireComponent(typeof(NetworkIdentity))]
+    public class UnicodeWatchMirrorMono_BasicPlayer : NetworkBehaviour
+    {
+
+        [SerializeField]
+        [SyncVar(hook = nameof(HookColorChanged))]
+        Color m_wantedWatchColor;
+
+        public UnityEvent<Color> m_onColorChanged;
+        public float m_randomSpotAtStart = 2f;
+        public bool m_randomColorAtStart = true;
+        
+        
+        
+        // Player is connected to the game
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            if (!isOwned)
+                return;
+            // Only if the player own this gameobject
+            // We change it place (NetworkTransform) will move it everywhere
+            transform.position = new Vector3(Random.Range(0f, m_randomSpotAtStart), Random.Range(0f, m_randomSpotAtStart), Random.Range(0f, m_randomSpotAtStart));
+            //When designer ask a new color at start of the player
+            if (m_randomColorAtStart)
+                // W ask to change the color with public method
+                SetNewRandomColor();
+        }
+
+        // Player ask to change color        
+        [ContextMenu("Set new Random Color")]
+        public void SetNewRandomColor()
+        {
+            Color c = new Color(Random.value, Random.value, Random.value);
+            // The request is send to the server
+            CmdSetColor(c);
+        }
+        //As it is authority require fall any can change the color of this player
+        // The following code is on the server
+        [Command(requiresAuthority = false)]
+        private void CmdSetColor(Color c)
+        {
+            // We change the color
+            m_wantedWatchColor = c;
+            // As we are on the server and it is SyncVar
+            // The change is send to all players.
+        }
+        // As we hook the sync var we are on the client now and the color is changed as variable.
+        private void HookColorChanged(Color oldColor, Color newColor)
+        {
+            // But in addition, for all the device we change the color with UnityEvent
+            // Of this player prefab.
+            m_onColorChanged?.Invoke(newColor);
+        }
+    }
+}
+```
+
+Should have work, but I missed something
+![alt text](image-24.png)
+
+You can still change your color.
+
+
+
+Let's add a on click for testing.
+(If Unity let's us do)
+https://github.com/EloiStree/2025_06_02_upm_tick_collection/blob/main/Runtime/TickMono_OnMouseDownUp.cs
+```cs
+    public class UnicodeWatchMono_MouseClickEvent : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    {
+        [SerializeField] private UnityEvent m_onMouseDown = new UnityEvent();
+        [SerializeField] private UnityEvent m_onMouseUp = new UnityEvent();
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            m_onMouseDown?.Invoke();
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            m_onMouseUp?.Invoke();
+        }
+    }
+```
+
+---------------
+
+# Now let's add The Index and RSA public Key.
+
+
+
+
+
+
